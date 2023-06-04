@@ -1,0 +1,32 @@
+{
+  "name": "bugaboo_test_backend",
+  "version": "1.0.0",
+  "description": "api para consumo do game feito para o teste da empresa bugaboo studio",
+  "author": "Daniel Carlos",
+  "license": "ISC",
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  },
+  "scripts": {
+    "start": "ts-node-dev src/index.ts --inspect=9229",
+    "dev": "ts-node-dev --files --transpile-only --respawn --inspect=9229 --project tsconfig.json src/index.ts",
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@prisma/client": "^4.12.0",
+    "@types/bcrypt": "^5.0.0",
+    "bcrypt": "^5.1.0",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "nodemon": "^2.0.22"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.17",
+    "@types/node": "^18.15.11",
+    "prisma": "^4.12.0",
+    "ts-node": "^10.9.1",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.0.4"
+  }
+}
