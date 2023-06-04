@@ -1,9 +1,19 @@
 import { Router } from "express";
 import { UserController } from "../controllers/UserController";
 
-const bcrypt = require("bcrypt");
 const router = Router();
 const userController = new UserController();
+
+router.post("/score/:id", async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { score } = req.body;
+    userController.addScore(Number(id), score);
+    res.json({ msg: "ok" });
+  } catch (error) {
+    next(error);
+  }
+});
 
 router.get("/:id", async (req, res, next) => {
   try {

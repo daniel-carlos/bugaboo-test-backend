@@ -1,14 +1,6 @@
 import { prisma } from "../../app";
 
 class UserController {
-  deleteUser = async (id: string) => {
-    const userDelete = await prisma.user.delete({
-      where: {
-        id: Number(id),
-      },
-    });
-  };
-
   findUserById = async (id: number) => {
     const userFound = await prisma.user.findFirst({
       where: {
@@ -27,6 +19,19 @@ class UserController {
     return userFound;
   };
 
+  addScore = async (id: number, score: number) => {
+    const user = await prisma.user.findFirst({
+      where: { id },
+    });
+
+    const prevScore = user?.score || 0;
+
+    await prisma.user.update({
+      where: { id },
+      data: { score: prevScore + score },
+    });
+  };
+
   createUser = async (username: string) => {
     const userCreated = await prisma.user.create({
       data: {
@@ -34,6 +39,15 @@ class UserController {
       },
     });
     return userCreated;
+  };
+
+  deleteUser = async (id: string) => {
+    const userDelete = await prisma.user.delete({
+      where: {
+        id: Number(id),
+      },
+    });
+    return userDelete;
   };
 }
 
