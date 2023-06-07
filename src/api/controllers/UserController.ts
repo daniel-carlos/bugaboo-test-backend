@@ -1,6 +1,21 @@
 import { prisma } from "../../app";
 
 class UserController {
+  getHighScores = async (limit: number) => {
+    const usersFound = await prisma.user.findMany({
+      orderBy: {
+        score: "desc",
+      },
+      take: limit,
+      where: {
+        score: {
+          gt: 0,
+        },
+      },
+    });
+    return usersFound;
+  };
+
   findUserById = async (id: number) => {
     const userFound = await prisma.user.findFirst({
       where: {
@@ -19,17 +34,30 @@ class UserController {
     return userFound;
   };
 
-  addScore = async (id: number, score: number) => {
+  findUsers = async (usernames: string[]) => {
+    const usersFound = await prisma.user.findMany({
+      where: {
+        username: { in: usernames },
+      },
+    });
+    return usersFound;
+  };
+
+  setScore = async (username: string, score: number) => {
     const user = await prisma.user.findFirst({
-      where: { id },
+      where: { username },
     });
 
-    const prevScore = user?.score || 0;
+    const maxScore = Math.max(user?.score || 0, score);
 
-    await prisma.user.update({
-      where: { id },
-      data: { score: prevScore + score },
-    });
+    const transaction = await prisma.$transaction([
+      prisma.user.update({
+        where: { username },
+        data: { score: maxScore },
+      }),
+    ]);
+
+    return transaction[0];
   };
 
   createUser = async (username: string) => {
